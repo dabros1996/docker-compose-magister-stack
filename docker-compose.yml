@@ -38,6 +38,7 @@ services:
       - SEMAPHORE_DB_DIALECT=postgres
       - SEMAPHORE_DB=semaphore
       - SEMAPHORE_ADMIN_PASSWORD=admin
+# dodać admina bo zapomnialeś durniu
     depends_on:
       - semaphore-db
 
