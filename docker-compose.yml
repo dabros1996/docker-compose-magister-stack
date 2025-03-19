@@ -6,7 +6,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     ports:
-      - "3001:3001"
+      - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
     environment:
@@ -29,7 +29,7 @@ services:
     container_name: semaphore
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3100:3000"
     environment:
       - SEMAPHORE_DB_USER=semaphore
       - SEMAPHORE_DB_PASS=semaphore
