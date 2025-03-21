@@ -1,6 +1,5 @@
 
 services:
-
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -38,7 +37,6 @@ services:
       - SEMAPHORE_DB_DIALECT=postgres
       - SEMAPHORE_DB=semaphore
       - SEMAPHORE_ADMIN_PASSWORD=admin
-# dodać admina bo zapomnialeś durniu
     depends_on:
       - semaphore-db
 
@@ -53,9 +51,20 @@ services:
     volumes:
       - semaphore-db-data:/var/lib/postgresql/data
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
 
 volumes:
   grafana-data:
   homeassistant-data:
   semaphore-db-data:
-
+  prometheus-data:
