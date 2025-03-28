@@ -1,0 +1,11 @@
+---
+- name: Verify container status
+  hosts: containers
+  tasks:
+    - name: Check container processes
+      ansible.builtin.command: ps aux
+      register: processes
+      
+    - name: Show processes
+      ansible.builtin.debug:
+        var: processes.stdout_lines

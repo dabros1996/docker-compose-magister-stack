@@ -1,0 +1,14 @@
+FROM semaphoreui/semaphore:latest
+
+# Switch to root for package installation
+USER root
+
+# Install requirements
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    docker-cli \
+    && pip3 install --no-cache-dir docker ansible
+
+# Switch back to semaphore user (UID 1000)
+USER 1000
