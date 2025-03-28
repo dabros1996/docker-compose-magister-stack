@@ -1,5 +1,4 @@
 - name: Hello World Playbook
-  hosts: local
   tasks:
     - name: Print Hello World
       debug:
