@@ -1,4 +1,5 @@
 - name: Hello World Playbook
+  hosts: localhost  # This playbook runs on the Ansible control node
   tasks:
     - name: Print Hello World
       debug:
