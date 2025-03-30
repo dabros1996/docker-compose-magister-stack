@@ -41,7 +41,7 @@ services:
           SEMAPHORE_ADMIN_PASSWORD: admin
           SEMAPHORE_ADMIN_NAME: admin
           SEMAPHORE_ADMIN_EMAIL: admin@localhost
-          SEMAPHORE_SLACK_ALERT: "True"
+
       volumes:
           - semaphore_data:/var/lib/semaphore
           - semaphore_config:/etc/semaphore
