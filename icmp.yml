@@ -1,0 +1,12 @@
+---
+- name: Check ICMP reachability of devices
+  hosts: localhost  # Runs on the Ansible control node
+  gather_facts: no
+
+  tasks:
+    - name: Ping each device from control node
+      command: ping -c 2 {{ item }}
+      loop: "{{ groups['all'] }}"  # Loop through all inventory hosts
+      ignore_errors: yes  # Continue even if some pings fail
+      changed_when: false  # Don't report this task as "changed"
+      delegate_to: localhost
