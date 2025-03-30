@@ -1,6 +1,5 @@
 
 services:
-
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -23,39 +22,50 @@ services:
     volumes:
       - homeassistant-data:/config
       - /etc/localtime:/etc/localtime:ro
+  blackbox-exporter:
+    image: prom/blackbox-exporter
+    container_name: blackbox-exporter
+    ports:
+      - "9115:9115"
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+
 
   semaphore:
-    image: semaphoreui/semaphore
-    container_name: semaphore
+      ports:
+          - 3100:3000
+      image: semaphoreui/semaphore:v2.13.1
+      environment:
+          SEMAPHORE_DB_DIALECT: bolt
+          SEMAPHORE_ADMIN: admin
+          SEMAPHORE_ADMIN_PASSWORD: admin
+          SEMAPHORE_ADMIN_NAME: admin
+          SEMAPHORE_ADMIN_EMAIL: admin@localhost
+          SEMAPHORE_SLACK_ALERT: "True"
+      volumes:
+          - semaphore_data:/var/lib/semaphore
+          - semaphore_config:/etc/semaphore
+          - semaphore_tmp:/tmp/semaphore
+
+
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
     restart: unless-stopped
     ports:
-      - "3100:3000"
-    environment:
-      - SEMAPHORE_DB_USER=semaphore
-      - SEMAPHORE_DB_PASS=semaphore
-      - SEMAPHORE_DB_HOST=semaphore-db
-      - SEMAPHORE_DB_PORT=5432
-      - SEMAPHORE_DB_DIALECT=postgres
-      - SEMAPHORE_DB=semaphore
-      - SEMAPHORE_ADMIN_PASSWORD=admin
-# dodać admina bo zapomnialeś durniu
-    depends_on:
-      - semaphore-db
-
-  semaphore-db:
-    image: postgres:13
-    container_name: semaphore-db
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=semaphore
-      - POSTGRES_PASSWORD=semaphore
-      - POSTGRES_DB=semaphore
+      - "9090:9090"
     volumes:
-      - semaphore-db-data:/var/lib/postgresql/data
-
+      - prometheus-data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
 
 volumes:
   grafana-data:
   homeassistant-data:
-  semaphore-db-data:
-
+  #semaphore-db-data:
+  prometheus-data:
+  semaphore_data:
+  semaphore_config:
+  semaphore_tmp:

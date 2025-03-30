@@ -1,0 +1,8 @@
+---
+- name: Test Ansible connectivity to devices
+  hosts: all  # Target all hosts in inventory (replace with specific group if needed)
+  gather_facts: no
+
+  tasks:
+    - name: Check if devices are reachable via Ansible
+      ansible.builtin.ping:
