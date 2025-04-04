@@ -1,12 +1,12 @@
 ---
-- name: Check ICMP reachability of devices
-  hosts: localhost  # Runs on the Ansible control node
-  gather_facts: no
+- name: Sprawdzenie dostępności ICMP urządzeń
+  hosts: localhost  # Uruchom na węźle kontrolnym Ansible
+  gather_facts: no  # Pomijamy zbieranie faktów dla szybszego wykonania
 
   tasks:
-    - name: Ping each device from control node
+    - name: Pinguj każde urządzenie z węzła kontrolnego
       command: ping -c 2 {{ item }}
-      loop: "{{ groups['all'] }}"  # Loop through all inventory hosts
-      ignore_errors: yes  # Continue even if some pings fail
-      changed_when: false  # Don't report this task as "changed"
-      delegate_to: localhost
+      loop: "{{ groups['all'] }}"  # Iteracja przez wszystkie hosty w inwentarzu
+      ignore_errors: yes  # Kontynuuj nawet jeśli niektóre pingi się nie powiodą
+      changed_when: false  # Nie oznaczaj tego zadania jako "zmienione"
+      delegate_to: localhost  # Wykonaj na lokalnym hoście

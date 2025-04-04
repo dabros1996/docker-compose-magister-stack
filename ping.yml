@@ -1,8 +1,8 @@
 ---
-- name: Test Ansible connectivity to devices
-  hosts: all  # Target all hosts in inventory (replace with specific group if needed)
-  gather_facts: no
+- name: Test połączenia Ansible z urządzeniami
+  hosts: all  # Docelowo wszystkie hosty w inwentarzu (zmień na konkretną grupę jeśli potrzeba)
+  gather_facts: no  # Pomijamy zbieranie faktów dla szybszego wykonania
 
   tasks:
-    - name: Check if devices are reachable via Ansible
+    - name: Sprawdź czy urządzenia odpowiadają przez Ansible
       ansible.builtin.ping:

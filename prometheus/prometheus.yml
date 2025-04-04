@@ -1,24 +1,24 @@
 global:
-  scrape_interval: 15s
+  scrape_interval: 15s  # Częstotliwość zbierania metryk
 
 scrape_configs:
-  - job_name: 'docker'
+  - job_name: 'docker'  # Konfiguracja monitorowania Docker
     static_configs:
       - targets: ['host.docker.internal:9323']
 
-  - job_name: 'blackbox'
+  - job_name: 'blackbox'  # Konfiguracja monitorowania zewnętrznych stron
     metrics_path: /probe
     params:
-      module: [http_2xx]
+      module: [http_2xx]  # Używaj modułu sprawdzającego kod odpowiedzi HTTP 200
     static_configs:
       - targets:
-        - https://www.google.com    # Google
-        - https://www.facebook.com  # Facebook
-        - https://www.reddit.com    # Reddit
+        - https://www.google.com    # Monitoring Google
+        - https://www.facebook.com  # Monitoring Facebook
+        - https://www.reddit.com    # Monitoring Reddit
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox-exporter:9115
+        replacement: blackbox-exporter:9115  # Adres usługi Blackbox Exporter

@@ -1,6 +1,7 @@
 
 services:
   grafana:
+    # Platforma do wizualizacji danych monitorowania
     image: grafana/grafana
     container_name: grafana
     restart: unless-stopped
@@ -9,20 +10,23 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Hasło admina (zmień w produkcji)
+      - GF_USERS_ALLOW_SIGN_UP=false     # Wyłączenie rejestracji użytkowników
 
   homeassistant:
+    # System automatyki domowej
     image: homeassistant/home-assistant
     container_name: homeassistant
     restart: unless-stopped
-    privileged: true
+    privileged: true  # Wymagane dla dostępu do urządzeń
     ports:
       - "8123:8123"
     volumes:
       - homeassistant-data:/config
-      - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro  # Synchronizacja czasu z hostem
+
   blackbox-exporter:
+    # Monitor zewnętrznych usług HTTP/HTTPS/DNS/TCP/ICMP
     image: prom/blackbox-exporter
     container_name: blackbox-exporter
     ports:
@@ -30,26 +34,25 @@ services:
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml
 
-
   semaphore:
-      ports:
-          - 3100:3000
-      image: semaphoreui/semaphore:v2.13.1
-      environment:
-          SEMAPHORE_DB_DIALECT: bolt
-          SEMAPHORE_ADMIN: admin
-          SEMAPHORE_ADMIN_PASSWORD: admin
-          SEMAPHORE_ADMIN_NAME: admin
-          SEMAPHORE_ADMIN_EMAIL: admin@localhost
-          SEMAPHORE_SLACK_ALERT: "True"
-      volumes:
-          - semaphore_data:/var/lib/semaphore
-          - semaphore_config:/etc/semaphore
-          - semaphore_tmp:/tmp/semaphore
-
-
+    # Interfejs użytkownika dla Ansible
+    ports:
+      - 3100:3000
+    image: semaphoreui/semaphore:v2.13.1
+    environment:
+      SEMAPHORE_DB_DIALECT: bolt          # Typ bazy danych
+      SEMAPHORE_ADMIN: admin              # Nazwa użytkownika admin
+      SEMAPHORE_ADMIN_PASSWORD: admin     # Hasło admina (zmień w produkcji)
+      SEMAPHORE_ADMIN_NAME: admin         # Wyświetlana nazwa admina
+      SEMAPHORE_ADMIN_EMAIL: admin@localhost
+      SEMAPHORE_SLACK_ALERT: "True"       # Powiadomienia Slack włączone
+    volumes:
+      - semaphore_data:/var/lib/semaphore
+      - semaphore_config:/etc/semaphore
+      - semaphore_tmp:/tmp/semaphore
 
   prometheus:
+    # System monitorowania i baza danych szeregów czasowych
     image: prom/prometheus
     container_name: prometheus
     restart: unless-stopped
@@ -61,10 +64,10 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
+# Wolumeny do przechowywania trwałych danych
 volumes:
   grafana-data:
   homeassistant-data:
-  #semaphore-db-data:
   prometheus-data:
   semaphore_data:
   semaphore_config:

@@ -1,9 +1,9 @@
 modules:
-  http_2xx:
+  http_2xx:  # Moduł sprawdzający poprawne odpowiedzi HTTP
     prober: http
-    timeout: 5s
+    timeout: 5s  # Maksymalny czas oczekiwania na odpowiedź
     http:
-      valid_status_codes: [200]
-      method: GET
-      preferred_ip_protocol: "ip4"
-      follow_redirects: true
+      valid_status_codes: [200]  # Akceptowane kody odpowiedzi
+      method: GET  # Metoda HTTP używana do sprawdzania
+      preferred_ip_protocol: "ip4"  # Preferowany protokół IP
+      follow_redirects: true  # Podążaj za przekierowaniami
